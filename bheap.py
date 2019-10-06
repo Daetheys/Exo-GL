@@ -11,47 +11,58 @@ class BinHeap:
 
     def percUp(self,i):
         while i // 2 > 0:
-          if self.heapList[i] < self.heapList[i // 2]:
-             tmp = self.heapList[i // 2]
-             self.heapList[i // 2] = self.heapList[i]
-             self.heapList[i] = tmp
-             i = i // 2
-
+            if self.heapList[i] < self.heapList[i // 2]:
+                #SWAP
+                tmp = self.heapList[i // 2]
+                self.heapList[i // 2] = self.heapList[i]
+                self.heapList[i] = tmp
+            i = i // 2
+                    
     def insert(self,k):
       self.heapList.append(k)
-      self.currentSize = self.currentSize + 1
       self.percUp(self.currentSize)
+      self.currentSize = self.currentSize + 1
 
     def percDown(self,i):
-      while (i * 2) < self.currentSize:
-          mc = self.minChild(i)
+      while (i * 2) < self.currentSize: #On verifie qu'on n'est pas sur une feuille
+          mc = self.minChild(i) #On prend le fils le plus petit
           if self.heapList[i] > self.heapList[mc]:
+              #Swap
               tmp = self.heapList[i]
               self.heapList[i] = self.heapList[mc]
               self.heapList[mc] = tmp
           i = mc
 
     def minChild(self,i):
-      if i * 2 + 1 > self.currentSize:
-          return i * 2
-      else:
-          if self.heapList[i*2] < self.heapList[i*2+1]:
-              return i * 2
-          else:
+        if i * 2 + 1 >= self.currentSize:
+            return i * 2
+        else:
+            if self.heapList[i*2] < self.heapList[i*2+1]:
+                return i * 2
+            else:
               return i * 2 + 1
 
     def delMin(self):
       retval = self.heapList[1]
-      self.heapList[1] = self.heapList[self.currentSize]
       self.currentSize = self.currentSize - 1
+      self.heapList[1] = self.heapList[self.currentSize]
       self.heapList.pop()
       self.percDown(1)
-      return rval
+      return retval
 
     def buildHeap(self,alist):
-      i = len(alist) // 2
+      #i = len(alist) #// 2
       self.currentSize = len(alist)
       self.heapList = [0] + alist[:]
-      while (i > 0):
+      i = 1
+      while (i <= self.currentSize):
           self.percUp(i)
-          i = i - 1
+          i = i + 1
+
+#Pour un debug plus précis et rapide, permet de faire des tests au cas par cas au fur et a mesure du lancement des fonctions
+if __name__ == "__main__":
+    B = BinHeap()
+    B.heapList = [0,0,-1,0,0,-1,0,0]
+    for i in range(1,8):
+        B.percUp(i)
+        print("--")
